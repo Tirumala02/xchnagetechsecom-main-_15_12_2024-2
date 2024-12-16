@@ -90,7 +90,7 @@ const getHSNCodeByCategory = async (categories, hsnData) => {
         return "N/A";  // Return "N/A" if the categories array is empty or invalid
     }
 
-    const lastCategory = categories[categories.length - 2];
+    const lastCategory = categories[categories.length - 1];
     console.log("lastCategory")
     console.log(lastCategory)
     if (!lastCategory) {
@@ -132,6 +132,8 @@ const iGenerateQuotationPDF = async (order, address, gstDetails) => {
             const doc = new PDFDocument({ margin: 50 });
             const buffers = [];
 
+            doc.font('Helvetica').fillColor('black');
+            
             doc.on('data', buffers.push.bind(buffers));  // Collect PDF data into the buffer
             doc.on('end', () => resolve(Buffer.concat(buffers)));  // Resolve with the complete PDF buffer
 
