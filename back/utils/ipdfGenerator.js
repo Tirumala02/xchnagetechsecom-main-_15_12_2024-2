@@ -137,6 +137,12 @@ const iGenerateQuotationPDF = async (order, address, gstDetails) => {
             doc.on('data', buffers.push.bind(buffers));  // Collect PDF data into the buffer
             doc.on('end', () => resolve(Buffer.concat(buffers)));  // Resolve with the complete PDF buffer
 
+            doc.on('pageAdded', () => {
+                doc.font('Helvetica')
+                   .fontSize(12)
+                   .fillColor('black');
+            });
+
             // Header Section
             doc.image('utils/logo.png', 50, 30, { width: 80 });
             doc.fontSize(18).text('QUOTATION', { align: 'center', underline: true }).moveDown();
