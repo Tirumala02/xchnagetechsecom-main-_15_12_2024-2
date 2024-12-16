@@ -14,7 +14,7 @@ import Dashboard from './pages/Dashboard'
 import TicketManagement from './pages/Tickets'
 
 // export const backendUrl = "https://xchnagetechsecom-backend.onrender.com"
-export const backendUrl = "http://localhost:4000"
+export const backendUrl = "https://xchnagetechsecom-main-15-12-2024-2.onrender.com"
 export const currency = '₹'
 
 const App = () => {

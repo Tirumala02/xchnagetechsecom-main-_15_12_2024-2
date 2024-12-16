@@ -11,7 +11,7 @@ async function searchAmazonQuery(query) {
     try {
 
        
-        const response = await axios.get('http://localhost:4000/api/admin/value-changer'); // Adjust the URL as needed
+        const response = await axios.get('https://xchnagetechsecom-main-15-12-2024-2.onrender.com/api/admin/value-changer'); // Adjust the URL as needed
         if (!response.data.success) {
             throw new Error(response.data.message || "Failed to fetch addPercentage value.");
         }

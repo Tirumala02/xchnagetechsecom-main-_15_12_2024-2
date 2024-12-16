@@ -11,7 +11,7 @@ const ShopContextProvider = (props) => {
     const delivery_fee = 10;
     // const backendUrl = "https://xchnagetechsecom-back.onrender.com"
     // const backendUrl = "https://xchnagetechsecom-backend.onrender.com"
-    const backendUrl = "http://localhost:4000"
+    const backendUrl = "https://xchnagetechsecom-main-15-12-2024-2.onrender.com"
     const [userDetails, setUserDetails] = useState({});
     const [search, setSearch] = useState('');
     const [showSearch, setShowSearch] = useState(false);

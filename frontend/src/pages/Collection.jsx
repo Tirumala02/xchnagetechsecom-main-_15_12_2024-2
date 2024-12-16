@@ -8,7 +8,7 @@ import ProductItem from '../components/ProductItem';
 import { toast } from "react-toastify";
 import axios from 'axios';
 
-const backendUrl = "http://localhost:4000"
+const backendUrl = "https://xchnagetechsecom-main-15-12-2024-2.onrender.com"
 
 const categories = [
   {
