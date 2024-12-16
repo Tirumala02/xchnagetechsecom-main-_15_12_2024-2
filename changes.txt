@@ -1,0 +1,46 @@
+Admin:
+✅Delivery time, 
+Price (%) 
+
+Home:
+categories
+product list
+
+collection:
+left panel: category filter
+
+✅ right Bottom:
+	cant find product?:
+	onClick(go to form >> in nav bar):
+		details:
+		Name, Email, text box, upload Document 
+
+
+	Add to cart(product item >> test2.js):
+
+Product Page:
+	Search bar problem
+
+	**Product price excluding GST x (+Price (%) )
+
+
+My profile:
+Add GST:
+GST, GST Name, SEZ (slide button)
+Billing Address
+
+
+CheckOut page:
+place oRder: Drop down list:
+	GST details
+
+
+/**************************************************************************/
+
+Backedn:
+PdfGeneration:
+SEZ:
+excluding gst
+if not:
+Include (excluding gst and including gst)
+
