@@ -13,7 +13,7 @@ const FeaturedCollection = () => {
   const itemsPerPage = 6; // Set the number of items per page
 
 
-    getSearchResults('https://www.amazon.in/s?k=featured&i=electronics')
+    // getSearchResults('https://www.amazon.in/s?k=featured&i=electronics')
 
   useEffect(() => {
     const fetchFeaturedProducts = async () => {
