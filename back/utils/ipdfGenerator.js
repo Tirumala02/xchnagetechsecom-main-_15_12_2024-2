@@ -105,9 +105,11 @@ const iGenerateQuotationPDF = async (order, address, gstDetails) => {
                 const hsnCode = await getHSNCodeByCategory(item.category, hsnData);
                 const gstAmount = (((item.iprice || item.price) - item.price) * item.quantity).toFixed(2);
                 const totalWithGST = ((item.iprice || item.price) * item.quantity).toFixed(2);
+                const limitedTitle = Array.isArray(item.title) ? item.title[0] : item.title.split(',')[0];
+
 
                 return [
-                    item.title?.[0] || 'Unknown Item',
+                    limitedTitle,
                     hsnCode,
                     item.quantity,
                     item.price.toFixed(2),
@@ -149,6 +151,8 @@ const iGenerateQuotationPDF = async (order, address, gstDetails) => {
 
             const totalInWords = `Total (in words): ${numberToWords.toWords(itotalAmount).toUpperCase()} RUPEES ONLY.`;
             doc.text(totalInWords, 50).moveDown();
+            doc.text(`Total Items / Qty: ${order.items.length} / ${order.items.reduce((sum, item) => sum + item.quantity, 0)}`).moveDown(2);
+
 
             doc.text('Bank Details:', { underline: true }).moveDown();
             doc.text('Bank: ICICI Bank').text('Account #: 428405001856').text('IFSC Code: ICIC0004284').text('Branch: B NARAYANAPURA').moveDown();
