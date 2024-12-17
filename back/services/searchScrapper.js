@@ -41,11 +41,12 @@ async function searchAmazonQuery(query) {
             let price = $(element).find('.a-price .a-offscreen').first().text().trim().replace('₹', '');
             price = price.replace(',', '')
             price = parseFloat(price);
-            price+=price*((addPercentage)/100);
+            price = Math.round((price + price * (addPercentage / 100)) * 100) / 100;
             
             let iprice = $(element).find('.a-price .a-offscreen').eq(1).text().trim().replace('₹', '')
             iprice = iprice.replace(',', '');
             iprice = parseFloat(iprice);
+            iprice = Math.round((iprice + iprice * (addPercentage / 100)) * 100) / 100;
 
             const image = $(element).find('.s-image').attr('src');
             const link = 'https://www.amazon.in' + $(element).find('.a-link-normal').attr('href');
