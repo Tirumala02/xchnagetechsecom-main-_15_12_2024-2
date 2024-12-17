@@ -90,7 +90,7 @@ const getHSNCodeByCategory = async (categories, hsnData) => {
         return "N/A";  // Return "N/A" if the categories array is empty or invalid
     }
 
-    const lastCategory = categories[categories.length - 1];
+    const lastCategory = categories[categories.length - 2] || categories[categories.length - 1];
     console.log("lastCategory")
     console.log(lastCategory)
     if (!lastCategory) {
