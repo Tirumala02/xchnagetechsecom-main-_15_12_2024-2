@@ -16,7 +16,8 @@ const ShopContextProvider = (props) => {
     const [search, setSearch] = useState('');
     const [showSearch, setShowSearch] = useState(false);
     const [cartItems, setCartItems] = useState({});
-    const [products, setProducts] = useState([]);
+    const [products, setProducts] = useState([]);    
+    const [bestProducts, setBestProducts] = useState([]);
     const [allAddedProducts, setAllAddedProducts] = useState([]);
     const [productDetail, setProductDetail] = useState(null);
 
@@ -283,6 +284,26 @@ const ShopContextProvider = (props) => {
         }
     };
 
+    const getBestSearchResults = async (query) => {
+        setIsLoading(true)
+        try {
+            const response = await axios.get(`${backendUrl}/api/product/results?query=${query}`);
+            if (response.data.success) {
+                const results = response.data.results;
+                setBestProducts(results); // State update
+                return results
+            } else {
+                toast.error(response.data.message);
+            }
+        } catch (error) {
+            console.error(error);
+            toast.error(error.message);
+        }
+        finally {
+            setIsLoading(false)
+        }
+    };
+
     const getSearchProduct = async (query) => {
         try {
             setIsLoading(true)
@@ -379,7 +400,7 @@ const ShopContextProvider = (props) => {
         gstForm,setGstForm,
         products, currency, delivery_fee,
         search, setSearch, showSearch, setShowSearch,
-        getSearchResults, getSearchProduct, productDetail, setProductDetail, fetchValueChanger, raiseTicket,
+        getSearchResults, getSearchProduct, productDetail, setProductDetail, fetchValueChanger, raiseTicket,bestProducts,
         cartItems, addToCart, setCartItems,
         getCartCount, updateQuantity,
         getCartAmount, navigate, backendUrl,
