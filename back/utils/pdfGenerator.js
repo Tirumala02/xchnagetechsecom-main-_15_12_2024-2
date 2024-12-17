@@ -72,7 +72,7 @@ function convertToIndianWords(number) {
 async function fetchHSNFromPython(query) {
     console.log("fetchHSNFromPython: " + query)
     try {
-        const response = await axios.post('https://xchange-hsn-code.onrender.com', {
+        const response = await axios.post('https://xchange-hsn-code.onrender.com/get-hsn-code', {
             query: query  // Send the query as JSON in the request body
         });
         console.log("response.data");  // Log the response to inspect it
