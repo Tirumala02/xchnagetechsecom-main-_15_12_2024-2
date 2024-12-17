@@ -5,11 +5,11 @@ import ProductCard from './ProductCard';
 import { FiChevronLeft, FiChevronRight } from 'react-icons/fi';
 
 const BestSeller = () => {
-  const { products } = useContext(ShopContext);
+  const { bestProducts } = useContext(ShopContext);
   const [bestSeller, setBestSeller] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [isLoading, setIsLoading] = useState(true);
-
+  const products=bestProducts;
   const itemsPerPage = 6; // Number of items per page
 
   useEffect(() => {
@@ -19,7 +19,7 @@ const BestSeller = () => {
         // Simulating API or data fetch
         await new Promise((resolve) => setTimeout(resolve, 1000));
 
-        const bestProduct = products.filter((item) => item.bestseller);
+        const bestProduct = products;
         setBestSeller(bestProduct);
       } catch (error) {
         console.error("Error fetching best seller products:", error);
@@ -75,9 +75,9 @@ const BestSeller = () => {
           {displayedProducts.map((item, index) => (
             <div key={index} className="flex justify-center">
               <ProductCard
-                id={item._id}
-                image={item.image[0]}
-                name={item.name}
+                id={item.asin}
+                image={item.image || (item.image && image[0])}
+                name={item.name||item.title}
                 price={item.price}
                 className="w-full h-full aspect-w-1 aspect-h-1" // Square Card
               />
