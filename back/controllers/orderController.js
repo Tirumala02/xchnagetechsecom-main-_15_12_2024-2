@@ -65,7 +65,14 @@ const sendOrderEmails = async (user, order, address,gstDetails) => {
         }
         
         
-        
+         const formatAddress = (address) => `
+            ${address.firstName} ${address.lastName}<br>
+            ${address.street},<br>
+            ${address.city}, ${address.state}, ${address.zipcode},<br>
+            ${address.country}<br>
+            Phone: ${address.phone}<br>
+            Email: ${address.email}
+        `;
 
         const generateEmailHTML = (name, order, recipientType) => {
             const greeting = recipientType === "user" ? `Hello ${name},` : `Hello Admin,`;
@@ -73,14 +80,63 @@ const sendOrderEmails = async (user, order, address,gstDetails) => {
                 ? "Thank you for shopping with us! Below are your order details."
                 : "A new order has been placed. Here are the details.";
             return ` 
-                <html>
-                <body>
-                    <p>${greeting}</p>
-                    <p>${intro}</p>
-                    <p>Order ID: ${order.orderId}</p>
-                    <p>Total Amount: ₹${order.amount}</p>
-                </body>
-                </html>`;
+                
+                <!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>XCHANGETECHS Order Confirmation</title>
+</head>
+<body style="font-family: Arial, sans-serif; line-height: 1.6; color: #333; margin: 0; padding: 0;">
+    <table cellpadding="0" cellspacing="0" border="0" width="100%" style="max-width: 600px; margin: 0 auto; background-color: #ffffff;">
+        <tr>
+            <td align="center" style="padding: 20px 0;">
+                <img src="${'https://xchangetechs.s3.ap-south-1.amazonaws.com/xchange-tech-v9/assets/img/xchange-techs.png'}" alt="XCHANGETECHS Logo" style=" height: 70px;">
+            </td>
+        </tr>
+        <tr>
+            <td style="background-color: #f8f8f8; padding: 20px; border-radius: 8px;">
+                <h2 style="color: #4CAF50; text-align: center; margin: 0 0 20px 0; font-size: 24px;">Order Confirmation</h2>
+                <p style="margin: 0 0 15px 0;">${greeting}</p>
+                <p style="margin: 0 0 20px 0;">${intro}</p>
+                <table style="width: 100%; border-collapse: collapse; margin-bottom: 20px;">
+                    <thead>
+                        <tr>
+                            <th style="text-align: left; border-bottom: 2px solid #ddd; padding: 10px; background-color: #e9e9e9; font-size: 14px;">Item</th>
+                            <th style="text-align: center; border-bottom: 2px solid #ddd; padding: 10px; background-color: #e9e9e9; font-size: 14px;">Quantity</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        ${order.items
+                    .map(
+                        (item) => `
+                                <tr>
+                                    <td style="padding: 10px; border-bottom: 1px solid #ddd; font-size: 14px;">${item.name || item.title}</td>
+                                    <td style="padding: 10px; border-bottom: 1px solid #ddd; text-align: center; font-size: 14px;">${item.quantity}</td>
+                                </tr>
+                            `
+                    )
+                    .join("")}
+                    </tbody>
+                </table>
+                <div style="background-color: #ffffff; padding: 15px; border-radius: 8px; margin-bottom: 20px; border: 1px solid #e0e0e0;">
+                    <h3 style="color: #4CAF50; margin: 0 0 10px 0; font-size: 18px;">Delivery Address:</h3>
+                    <p style="margin: 0; font-size: 14px;">${formatAddress(address)}</p>
+                </div>
+                <p style="margin: 20px 0 0 0; text-align: center; font-size: 16px; font-weight: bold;">Thank you for choosing XCHANGETECHS!</p>
+            </td>
+        </tr>
+        <tr>
+            <td style="text-align: center; padding: 20px 0; color: #888; font-size: 12px;">
+                <p style="margin: 0 0 5px 0;">This is an automated email. Please do not reply to this message.</p>
+                <p style="margin: 0;">&copy; ${new Date().getFullYear()} XCHANGETECHS. All rights reserved.</p>
+            </td>
+        </tr>
+    </table>
+</body>
+</html>
+                `;
         };
 
         const userHTML = generateEmailHTML(address.firstName, order, 'user');
