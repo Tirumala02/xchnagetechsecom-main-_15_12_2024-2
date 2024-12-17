@@ -398,6 +398,8 @@ const ProfilePage = () => {
         billingAddress: "",
         isSEZ: false,
       });
+      window.location.reload();
+
     } catch (error) {
       console.error("Error adding GST details:", error);
       toast.error("Failed to add GST details");
@@ -413,6 +415,8 @@ const ProfilePage = () => {
       else toast.error(response.data.message);
       setGstList(gstList.map(gst => gst._id === editGstForm._id ? editGstForm : gst));
       setEditGstForm(null);
+      window.location.reload();
+
     } catch (error) {
       console.error("Error updating GST details:", error);
       toast.error("Failed to update GST details");
