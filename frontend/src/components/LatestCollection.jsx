@@ -14,6 +14,9 @@ const FeaturedCollection = () => {
 
 
     // getSearchResults('https://www.amazon.in/s?k=featured&i=electronics')
+  useEffect(()=>{
+    getSearchResults('featured devices')
+   },[])
 
   useEffect(() => {
     const fetchFeaturedProducts = async () => {
@@ -80,9 +83,9 @@ const FeaturedCollection = () => {
               <ProductCard
                 id={item.asin||item._id}
                 item={item}
-                image={item.image[0] || (item.image&&item.image[0]) || (item.images&&item.images[0])}
+                image={item.image || (item.image&&item.image[0]) || (item.images&&item.images[0])}
                 name={item.title || item.name}
-                price={item.price || item.price}
+                price={item.price}
                 className="w-full h-full aspect-w-1 aspect-h-1" // Square Card
               />
             </div>
