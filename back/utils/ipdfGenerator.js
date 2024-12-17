@@ -183,8 +183,10 @@ const iGenerateQuotationPDF = async (order, address, gstDetails) => {
                 console.log("item.category:\n");
                 console.log(item);
                 const hsnCode = await getHSNCodeByCategory(item.category, hsnData); // Await the promise here
+                const limitedTitle = Array.isArray(item.title) ? item.title[0] : item.title.split(',')[0];
+
                 tableRows.push([
-                    item.title,
+                    limitedTitle,
                     hsnCode,
                     item.quantity,
                     `${item.price.toFixed(2) || item.price_upper.toFixed(2)}`,
