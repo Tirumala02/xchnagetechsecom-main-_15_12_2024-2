@@ -377,7 +377,8 @@ const ShopContextProvider = (props) => {
 
 
     useEffect(() => {
-        getProductsData()
+        getProductsData();
+        getBestSearchResults('best tech devices')
     }, [])
 
 
