@@ -116,6 +116,7 @@ const Navbar = () => {
         e.preventDefault();
         if (search.trim()) {
             // Implement your search logic here
+            navigate('/collection');
             console.log('Searching for:', search);
             getSearchResults(search)
             // For example: navigate to search results page
@@ -125,7 +126,7 @@ const Navbar = () => {
     useEffect(() => {
         // Check if current path includes 'collection' and set showSearch accordingly
         const path = window.location.pathname;
-        setShowSearch(path.includes('collection'));
+        // setShowSearch(path.includes('collection'));
     }, []);
 
     return (
