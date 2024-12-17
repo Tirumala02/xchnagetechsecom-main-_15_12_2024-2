@@ -175,7 +175,7 @@ const ProductCard = ({ item, id, image, name, price }) => {
           className="block aspect-square overflow-hidden"
         >
           <img
-            className="w-full h-full object-cover transition-transform duration-300 hover:scale-105"
+            className="w-full h-full object-contain transition-transform duration-300 hover:scale-105"
             src={image}
             alt={name}
           />
