@@ -18,7 +18,7 @@ async function fetchAmazonProducts() {
         // Loop through each product in the main slot
         $('.s-main-slot .s-result-item').each((index, element) => {
             const title = $(element).find('.a-text-normal h2').text().trim();
-            let price = $(element).find('.a-price .a-offscreen').first().text().trim().replace('₹', '').replace('/,/g', '');
+            let price = $(element).find('.a-price .a-offscreen').first().text().trim().replace('₹', '').replace(/,/g, '');
             price = parseFloat(price);
 
             const image = $(element).find('.s-image').attr('src');
