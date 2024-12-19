@@ -185,8 +185,6 @@ const generateQuotationPDF = async (order, address, gstDetails) => {
                 .moveDown(2);
             // Build Table Rows with HSN Codes
             const tableRows = [];
-            let currentPage = 1; // To track page changes and headers
-
             for (const item of order.items) {
                 console.log("item.category:\n");
                 console.log(item);
@@ -202,7 +200,6 @@ const generateQuotationPDF = async (order, address, gstDetails) => {
                 // Check if the current row fits on the page
                 if (currentY + rowHeight > pageHeight) {
                     doc.addPage(); // Add a new page only when the row doesn't fit
-                    currentPage++; // Increment page counter
                 }
 
                 tableRows.push([
@@ -232,35 +229,10 @@ const generateQuotationPDF = async (order, address, gstDetails) => {
 
             // Render Table
             doc.table(table, {
-                prepareHeader: () => {
-                    doc.font("Helvetica-Bold").fontSize(10);
-                    // Draw the header if it's a new page (for the first page and subsequent pages)
-                    if (currentPage === 1 || doc.y > doc.page.height - doc.page.margins.bottom - 50) {
-                        doc.text('Item Name', 50, doc.y);
-                        doc.text('HSN Code', 250, doc.y);
-                        doc.text('Quantity', 320, doc.y);
-                        doc.text('Unit Price', 380, doc.y);
-                        doc.text('Amount', 460, doc.y);
-                        doc.y += 20; // Move to the next line after header
-                    }
-                },
-                prepareRow: (row, i) => {
-                    doc.font("Helvetica").fontSize(10);
-                    // Automatically add a page after every 30 rows or based on content
-                    if (i % 30 === 0 && i !== 0) {
-                        doc.addPage();
-                        currentPage++; // Increment page counter
-                        doc.text('Item Name', 50, doc.y);
-                        doc.text('HSN Code', 250, doc.y);
-                        doc.text('Quantity', 320, doc.y);
-                        doc.text('Unit Price', 380, doc.y);
-                        doc.text('Amount', 460, doc.y);
-                        doc.y += 20; // Move to the next line after header
-                    }
-                },
+                prepareHeader: () => doc.font("Helvetica-Bold").fontSize(10),
+                prepareRow: () => doc.font("Helvetica").fontSize(10),
                 columnWidths: [200, 70, 50, 70, 90], // Adjust column widths, give 200 to Item Name
             });
-
 
 
             // Total in Words
