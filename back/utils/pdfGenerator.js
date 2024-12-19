@@ -193,7 +193,7 @@ const generateQuotationPDF = async (order, address, gstDetails) => {
                 // const limitedTitle = Array.isArray(item.title) ? item.title[0] : item.title;
 
                 // Check if the title width exceeds the allowed space
-                const titleWidth = doc.widthOfString(limitedTitle, { font: "Helvetica", size: 10 });
+                const titleWidth = doc.widthOfString(item.title, { font: "Helvetica", size: 10 });
                 const maxNameWidth = 200; // Adjust based on column width
                 if (titleWidth > maxNameWidth) {
                     doc.addPage(); // Add a new page for long names

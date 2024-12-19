@@ -277,7 +277,7 @@ const PlaceOrder = () => {
                     </div>
 
                     <div className="mt-12">
-                        <Title text1={'PAYMENT'} text2={'METHOD'} />
+                        {/* <Title text1={'PAYMENT'} text2={'METHOD'} />
                         <div className="flex gap-3 flex-col lg:flex-row">
                             <div
                                 onClick={() => setMethod('cod')}
@@ -286,7 +286,7 @@ const PlaceOrder = () => {
                                 <p className={`min-w-3.5 h-3.5 border rounded-full ${method === 'cod' ? 'bg-green-400' : ''}`}></p>
                                 <p className="text-gray-500 text-sm font-medium mx-4">CASH ON DELIVERY</p>
                             </div>
-                        </div>
+                        </div> */}
 
                         <div className="w-full text-end mt-8">
                             <button

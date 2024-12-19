@@ -107,7 +107,7 @@ const iGenerateQuotationPDF = async (order, address, gstDetails) => {
                 // const limitedTitle = Array.isArray(item.title) ? item.title[0] : item.title;
 
                 // Check if the name length exceeds a threshold and split to a new page
-                const nameWidth = doc.widthOfString(limitedTitle, { font: "Helvetica", size: 10 });
+                const nameWidth = doc.widthOfString(item.title, { font: "Helvetica", size: 10 });
                 const pageWidth = 300; // Adjust according to your layout
                 if (nameWidth > pageWidth) {
                     doc.addPage();
