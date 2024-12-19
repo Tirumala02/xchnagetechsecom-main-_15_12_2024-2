@@ -190,17 +190,20 @@ const generateQuotationPDF = async (order, address, gstDetails) => {
                 console.log(item);
 
                 const hsnCode = await getHSNCodeByCategory(item.category, hsnData); // Await the promise here
-                // const limitedTitle = Array.isArray(item.title) ? item.title[0] : item.title;
+                const limitedTitle = Array.isArray(item.title) ? item.title[0] : item.title;
 
-                // Check if the title width exceeds the allowed space
-                const titleWidth = doc.widthOfString(item.title, { font: "Helvetica", size: 10 });
-                const maxNameWidth = 200; // Adjust based on column width
-                if (titleWidth > maxNameWidth) {
-                    doc.addPage(); // Add a new page for long names
+                // Measure the row height, including the title
+                const rowHeight = doc.heightOfString(limitedTitle, { font: "Helvetica", size: 10 }) + 10; // Add padding
+                const currentY = doc.y; // Get the current position on the page
+                const pageHeight = doc.page.height - doc.page.margins.bottom;
+
+                // Check if the current row fits on the page
+                if (currentY + rowHeight > pageHeight) {
+                    doc.addPage(); // Add a new page only when the row doesn't fit
                 }
 
                 tableRows.push([
-                    item.title,
+                    limitedTitle,
                     hsnCode,
                     item.quantity,
                     `${item.price.toFixed(2) || item.price_upper.toFixed(2)}`,
@@ -230,6 +233,7 @@ const generateQuotationPDF = async (order, address, gstDetails) => {
                 prepareRow: () => doc.font("Helvetica").fontSize(10),
                 columnWidths: [200, 70, 50, 70, 90], // Adjust column widths, give 200 to Item Name
             });
+
 
             // Total in Words
             doc.moveDown();
