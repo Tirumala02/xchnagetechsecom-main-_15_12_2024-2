@@ -100,13 +100,18 @@ const iGenerateQuotationPDF = async (order, address, gstDetails) => {
             doc.text(`${address.street}, ${address.city}, ${address.state}, ${address.zipcode}`, 50)
                 .text(`${address.country}`)
                 .moveDown(2);
-
             const tableRows = await Promise.all(order.items.map(async (item) => {
                 const hsnCode = await getHSNCodeByCategory(item.category, hsnData);
                 const gstAmount = (((item.iprice || item.price) - item.price) * item.quantity).toFixed(2);
                 const totalWithGST = ((item.iprice || item.price) * item.quantity).toFixed(2);
-                const limitedTitle = Array.isArray(item.title) ? item.title[0] : item.title.split(',')[0];
+                const limitedTitle = Array.isArray(item.title) ? item.title[0] : item.title;
 
+                // Check if the name length exceeds a threshold and split to a new page
+                const nameWidth = doc.widthOfString(limitedTitle, { font: "Helvetica", size: 10 });
+                const pageWidth = 300; // Adjust according to your layout
+                if (nameWidth > pageWidth) {
+                    doc.addPage();
+                }
 
                 return [
                     limitedTitle,
@@ -127,11 +132,24 @@ const iGenerateQuotationPDF = async (order, address, gstDetails) => {
                 ]);
             }
 
+            // Create the table
             const table = {
                 title: 'Order Details',
                 headers: ['Item Name', 'HSN Code', 'Quantity', 'Unit Price', 'GST Amount', 'Amount with GST'],
                 rows: tableRows,
             };
+
+            doc.table(table, {
+                prepareHeader: () => doc.font("Helvetica-Bold").fontSize(10),
+                prepareRow: (row, i) => {
+                    doc.font("Helvetica").fontSize(10);
+
+                    // Automatically add a page after every 30 rows
+                    if (i % 30 === 0 && i !== 0) doc.addPage();
+                },
+                columnWidths: [200, 70, 50, 70, 70, 90], // Adjust column widths (Item Name given more space)
+            });
+
 
             doc.table(table, {
                 prepareHeader: () => doc.font("Helvetica-Bold").fontSize(10),
