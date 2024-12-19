@@ -57,6 +57,11 @@ const Product = () => {
     setQuantity(1);
     addToCart(productDetail || productData, 'default', 1);
   };
+  
+  // Format price
+  const formatPrice = (price) => {
+    return price.toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+  };
 
   const fetchProductData = async () => {
     setIsLoading(true);
@@ -254,7 +259,7 @@ const Product = () => {
             </div>
             <div className="flex-1">
               <h1 className="font-bold text-3xl mt-2 text-gray-800">{productData.name}</h1>
-              <p className="mt-5 text-3xl font-semibold text-gray-800">{currency}{productData.price}</p>
+              <p className="mt-5 text-3xl font-semibold text-gray-800">{currency}{formatPrice(productData.price)}</p>
               <p className="mt-5 text-gray-600">{productData.description}</p>
               <div className="mt-5 text-gray-600">
                 <ul className="list-inside">
