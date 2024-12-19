@@ -39,12 +39,12 @@ async function searchAmazonQuery(query) {
             const title = $(element).find('.a-text-normal h2').text().trim();
 
             let price = $(element).find('.a-price .a-offscreen').first().text().trim().replace('₹', '');
-            price = price.replace(',', '')
+            price = price.replace('/,/g', '')
             price = parseFloat(price);
             price = Math.round((price + price * (addPercentage / 100)) * 100) / 100;
             
             let iprice = $(element).find('.a-price .a-offscreen').eq(1).text().trim().replace('₹', '')
-            iprice = iprice.replace(',', '');
+            iprice = iprice.replace('/,/g', '');
             iprice = parseFloat(iprice);
             iprice = Math.round((iprice + iprice * (addPercentage / 100)) * 100) / 100;
 
@@ -125,7 +125,7 @@ export default searchAmazonQuery;
 //         $('.s-main-slot .s-result-item').each((index, element) => {
 //             const title = $(element).find('.a-text-normal h2').text().trim();
 //             let price = $(element).find('.a-price .a-offscreen').first().text().trim().replace('₹', '');
-//             price= price.replace(',', '')
+//             price= price.replace('/,/g', '')
 //             console.log("price before: "+price)
 //             // Parse price as float and apply valueChanger logic
 //             // price = parseFloat(price);

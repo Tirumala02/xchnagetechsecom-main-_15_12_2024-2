@@ -81,14 +81,14 @@ async function scrapeAmazonProduct(productUrl) {
         const title = $('#productTitle').text().trim();
         // let price = $('#corePrice_desktop .priceblock_vat_excl_price .a-price .a-offscreen').first().text().trim(); // Extract price from corePrice_desktop
         let price = $('#corePrice_desktop .priceblock_vat_excl_price .a-price .a-offscreen').first().text().trim().replace('₹', '');
-            price = price.replace(',', '')
+            price = price.replace('/,/g', '')
             price = parseFloat(price);
             price = Math.round((price + price * (addPercentage / 100)) * 100) / 100;
 
 
 
         let iprice = $('.a-price .a-offscreen').eq(1).text().trim().replace('₹', '')
-            iprice = iprice.replace(',', '');
+            iprice = iprice.replace('/,/g', '');
             iprice = parseFloat(iprice);
             iprice = Math.round((iprice + iprice * (addPercentage / 100)) * 100) / 100;
         
