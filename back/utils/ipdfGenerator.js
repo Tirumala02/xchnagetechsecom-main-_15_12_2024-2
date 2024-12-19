@@ -105,9 +105,11 @@ const iGenerateQuotationPDF = async (order, address, gstDetails) => {
                 const gstAmount = (((item.iprice || item.price) - item.price) * item.quantity).toFixed(2);
                 const totalWithGST = ((item.iprice || item.price) * item.quantity).toFixed(2);
                 // const limitedTitle = ArraZZy.isArray(item.title) ? item.title[0] : item.title;
+                const limitedTitle = Array.isArray(item.title) ? item.title[0] : item.title;
 
-                // Check if the name length exceeds a threshold and split to a new page
-                const nameWidth = doc.widthOfString(limitedTitle, { font: "Helvetica", size: 10 });
+                // Measure the row height, including the title
+                const rowHeight = doc.heightOfString(limitedTitle, { font: "Helvetica", size: 10 }) + 10; // Add padding
+                const currentY = doc.y; // Get the current position on the page
                 const pageHeight = doc.page.height - doc.page.margins.bottom;
 
                 // Check if the current row fits on the page
