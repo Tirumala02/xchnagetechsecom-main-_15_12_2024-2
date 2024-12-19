@@ -2,7 +2,7 @@ import React from 'react'
 import { Routes, Route } from 'react-router-dom'
 import { motion } from 'framer-motion'; // Framer Motion for animations
 import { Link } from 'react-router-dom'; 
-
+import AnimatedButton from './components/AnimatedButton';
 import Home from './pages/Home'
 import Collection from './pages/Collection'
 import About from './pages/About'
@@ -47,11 +47,7 @@ const App = () => {
         <Route path='/orders' element={<Orders />} />
         <Route path='/verify' element={<Verify />} />
       </Routes>
-      <motion.button
-          className="fixed bottom-4 right-4 bg-blue-500 text-white py-2 px-4 rounded-full shadow-lg hover:bg-blue-400 transition duration-300"
-        >
-          <Link to="/product-request">Can't find product?</Link> {/* Navigate to /contact-us */}
-        </motion.button>
+      <AnimatedButton></AnimatedButton>
     </div>
     <Footer />
 

@@ -48,43 +48,6 @@ const ProductItem = ({ item, id, image, name, price, link }) => {
       updateQuantity(id, 'default', 0);
     }
   };
-
-  // // Handle adding to cart
-  // const handleAddToCart = async() => {
-  //   setQuantity(1);
-  //   console.log('productDetail in productItem',productDetail)
-  //   (productDetail && ( addToCart(productDetail, 'default', 1)))
-  //  ; // Assuming "default" size
-  // };
-
-
-
-  // useEffect(() => {
-  //   const getSearchProduct = async (productLink) => {
-  //     console.log('getSearchProduct', getSearchProduct)
-  //     // Fetch product data here (assumed to be async)
-  //     const response = await axios.get(`${backendUrl}/api/product/product-details?query=${productLink}`);
-  //     console.log(response.data);
-  //     const data=response.data.results
-  //     setProductDetail(data);
-  //   };
-
-  //   if (link) {
-  //     getSearchProduct(link);
-  //   }
-  // },[link] ); // Runs only when `link` changes
-
-  // // Handle adding product to the cart
-  // const handleAddToCart = () => {
-  //   setQuantity(1);
-
-  //   console.log('productDetail in productItem', productDetail);
-  //   if (productDetail) {
-  //     addToCart(productDetail, 'default', 1); // Assuming "default" size
-  //   }
-  // };
-
-
   const handleAddToCart = async () => {
 
     setIsLoading(true);  // Show loader while fetching
@@ -115,16 +78,7 @@ const ProductItem = ({ item, id, image, name, price, link }) => {
       className="max-w-7xl border border-gray-200 bg p-6 my-3 rounded-lg  duration-300 flex flex-row md:flex-row flex-start gap-3 justify-start felx-wrap relative"
     >
       {/* Favorite Icon */}
-      <div
-        className="absolute top-2 right-2 bg-white p-1 rounded-full shadow-sm hover:shadow-md cursor-pointer transition-shadow z-10"
-        onClick={toggleFavorite}
-      >
-        {isFavorited ? (
-          <AiFillHeart className="text-[#F3441C] text-xl" />
-        ) : (
-          <AiOutlineHeart className="text-[#F3441C] text-xl" />
-        )}
-      </div>
+     
 
       <div className=' max-w-72 md:w-56 border-r border-gray-200 my-auto ' >
         <Link
@@ -188,9 +142,6 @@ const ProductItem = ({ item, id, image, name, price, link }) => {
           </button>
 
         )}
-
-      
-
       </div>
     </div>
 
