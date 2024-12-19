@@ -183,52 +183,26 @@ const generateQuotationPDF = async (order, address, gstDetails) => {
             doc.text(`${address.street}, ${address.city}, ${address.state}, ${address.zipcode}`, 50)
                 .text(`${address.country}`)
                 .moveDown(2);
-                
+            // Build Table Rows with HSN Codes
             const tableRows = [];
-            let currentPage = 1; // Track current page
-            const itemsPerPage = 30; // Example: Set a threshold for how many items per page (adjust as needed)
-            let yPosition = doc.y; // Starting Y position for the first page (adjust based on your layout)
-            const pageHeight = doc.page.height - doc.page.margins.bottom; // Page height
-            const columnWidths = [200, 70, 50, 70, 90]; // Column widths for the table
+            let currentPage = 1; // To track page changes and headers
 
-            // Function to draw the header
-            const drawTableHeader = () => {
-                doc.font("Helvetica-Bold").fontSize(10);
-                doc.text('Item Name', 50, yPosition);
-                doc.text('HSN Code', 250, yPosition);
-                doc.text('Quantity', 300, yPosition);
-                doc.text('Unit Price', 350, yPosition);
-                doc.text('Amount', 450, yPosition);
-            };
-
-            // Function to render table rows
-            const renderTableRow = (row, yPosition) => {
-                doc.font("Helvetica").fontSize(10);
-                const [title, hsnCode, quantity, unitPrice, amount] = row;
-                doc.text(title, 50, yPosition);
-                doc.text(hsnCode, 250, yPosition);
-                doc.text(quantity.toString(), 300, yPosition);
-                doc.text(unitPrice, 350, yPosition);
-                doc.text(amount, 450, yPosition);
-                return yPosition + 20; // Adjust for row height (increase if needed)
-            };
-
-            for (const [index, item] of order.items.entries()) {
+            for (const item of order.items) {
                 console.log("item.category:\n");
                 console.log(item);
 
-                const hsnCode = await getHSNCodeByCategory(item.category, hsnData);
+                const hsnCode = await getHSNCodeByCategory(item.category, hsnData); // Await the promise here
                 const limitedTitle = Array.isArray(item.title) ? item.title[0] : item.title;
 
                 // Measure the row height, including the title
-                const rowHeight = doc.heightOfString(limitedTitle, { font: "Helvetica", size: 10 }) + 10;
+                const rowHeight = doc.heightOfString(limitedTitle, { font: "Helvetica", size: 10 }) + 10; // Add padding
+                const currentY = doc.y; // Get the current position on the page
+                const pageHeight = doc.page.height - doc.page.margins.bottom;
 
                 // Check if the current row fits on the page
-                if (yPosition + rowHeight > pageHeight) {
-                    doc.addPage(); // Add a new page
-                    currentPage++;
-                    yPosition = 60; // Reset Y position for new page
-                    drawTableHeader(); // Draw header on the new page
+                if (currentY + rowHeight > pageHeight) {
+                    doc.addPage(); // Add a new page only when the row doesn't fit
+                    currentPage++; // Increment page counter
                 }
 
                 tableRows.push([
@@ -236,32 +210,57 @@ const generateQuotationPDF = async (order, address, gstDetails) => {
                     hsnCode,
                     item.quantity,
                     `${item.price.toFixed(2) || item.price_upper.toFixed(2)}`,
-                    `${(item.quantity * (item.price_upper || item.price)).toFixed(2)}`
+                    `${(item.quantity * (item.price_upper || item.price)).toFixed(2)}`,
                 ]);
-
-                yPosition = renderTableRow(tableRows[index], yPosition);
             }
 
-            // Delivery Charges (if any)
+            // Delivery Charges
             if (order.deliveryCharge) {
                 tableRows.push([
                     'Delivery Charges', '', 1,
                     `${order.deliveryCharge.toFixed(2)}`,
                     `${order.deliveryCharge.toFixed(2)}`
                 ]);
-                yPosition = renderTableRow(tableRows[tableRows.length - 1], yPosition);
             }
 
-            // Final Render: Draw the table
-            doc.table({
+            // Table Header and Rows
+            const table = {
                 title: 'Order Details',
                 headers: ['Item Name', 'HSN Code', 'Quantity', 'Unit Price', 'Amount'],
                 rows: tableRows,
-            }, {
-                prepareHeader: () => doc.font("Helvetica-Bold").fontSize(10),
-                prepareRow: () => doc.font("Helvetica").fontSize(10),
-                columnWidths: columnWidths, // Column widths
+            };
+
+            // Render Table
+            doc.table(table, {
+                prepareHeader: () => {
+                    doc.font("Helvetica-Bold").fontSize(10);
+                    // Draw the header if it's a new page (for the first page and subsequent pages)
+                    if (currentPage === 1 || doc.y > doc.page.height - doc.page.margins.bottom - 50) {
+                        doc.text('Item Name', 50, doc.y);
+                        doc.text('HSN Code', 250, doc.y);
+                        doc.text('Quantity', 320, doc.y);
+                        doc.text('Unit Price', 380, doc.y);
+                        doc.text('Amount', 460, doc.y);
+                        doc.y += 20; // Move to the next line after header
+                    }
+                },
+                prepareRow: (row, i) => {
+                    doc.font("Helvetica").fontSize(10);
+                    // Automatically add a page after every 30 rows or based on content
+                    if (i % 30 === 0 && i !== 0) {
+                        doc.addPage();
+                        currentPage++; // Increment page counter
+                        doc.text('Item Name', 50, doc.y);
+                        doc.text('HSN Code', 250, doc.y);
+                        doc.text('Quantity', 320, doc.y);
+                        doc.text('Unit Price', 380, doc.y);
+                        doc.text('Amount', 460, doc.y);
+                        doc.y += 20; // Move to the next line after header
+                    }
+                },
+                columnWidths: [200, 70, 50, 70, 90], // Adjust column widths, give 200 to Item Name
             });
+
 
 
             // Total in Words

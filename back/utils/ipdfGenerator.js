@@ -104,18 +104,15 @@ const iGenerateQuotationPDF = async (order, address, gstDetails) => {
                 const hsnCode = await getHSNCodeByCategory(item.category, hsnData);
                 const gstAmount = (((item.iprice || item.price) - item.price) * item.quantity).toFixed(2);
                 const totalWithGST = ((item.iprice || item.price) * item.quantity).toFixed(2);
-                // const limitedTitle = Array.isArray(item.title) ? item.title[0] : item.title;
-                const limitedTitle = Array.isArray(item.title) ? item.title[0] : item.title;
+                // const limitedTitle = ArraZZy.isArray(item.title) ? item.title[0] : item.title;
 
-                // Measure the row height, including the title
-                const rowHeight = doc.heightOfString(limitedTitle, { font: "Helvetica", size: 10 }) + 10; // Add padding
-                const currentY = doc.y; // Get the current position on the page
-                const pageHeight = doc.page.height - doc.page.margins.bottom;
-
-                // Check if the current row fits on the page
-                if (currentY + rowHeight > pageHeight) {
-                    doc.addPage(); // Add a new page only when the row doesn't fit
+                // Check if the name length exceeds a threshold and split to a new page
+                const nameWidth = doc.widthOfString(limitedTitle, { font: "Helvetica", size: 10 });
+                const pageWidth = 300; // Adjust according to your layout
+                if (nameWidth > pageWidth) {
+                    doc.addPage();
                 }
+
                 return [
                     item.title,
                     hsnCode,
