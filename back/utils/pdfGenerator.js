@@ -136,14 +136,14 @@ const generateQuotationPDF = async (order, address, gstDetails) => {
             const buffers = [];
 
             doc.font('Helvetica').fillColor('black');
-            
+
             doc.on('data', buffers.push.bind(buffers));  // Collect PDF data into the buffer
             doc.on('end', () => resolve(Buffer.concat(buffers)));  // Resolve with the complete PDF buffer
 
             doc.on('pageAdded', () => {
                 doc.font('Helvetica')
-                   .fontSize(12)
-                   .fillColor('black');
+                    .fontSize(12)
+                    .fillColor('black');
             });
 
             // Header Section
@@ -183,32 +183,39 @@ const generateQuotationPDF = async (order, address, gstDetails) => {
             doc.text(`${address.street}, ${address.city}, ${address.state}, ${address.zipcode}`, 50)
                 .text(`${address.country}`)
                 .moveDown(2);
-
             // Build Table Rows with HSN Codes
             const tableRows = [];
             for (const item of order.items) {
                 console.log("item.category:\n");
                 console.log(item);
+
                 const hsnCode = await getHSNCodeByCategory(item.category, hsnData); // Await the promise here
-                const limitedTitle = Array.isArray(item.title) ? item.title[0] : item.title.split(',')[0];
+                // const limitedTitle = Array.isArray(item.title) ? item.title[0] : item.title;
+
+                // Check if the title width exceeds the allowed space
+                const titleWidth = doc.widthOfString(limitedTitle, { font: "Helvetica", size: 10 });
+                const maxNameWidth = 200; // Adjust based on column width
+                if (titleWidth > maxNameWidth) {
+                    doc.addPage(); // Add a new page for long names
+                }
 
                 tableRows.push([
-                    limitedTitle,
+                    item.title,
                     hsnCode,
                     item.quantity,
                     `${item.price.toFixed(2) || item.price_upper.toFixed(2)}`,
-                    `${(item.quantity * (item.price_upper || item.price))}`,
+                    `${(item.quantity * (item.price_upper || item.price)).toFixed(2)}`,
                 ]);
             }
 
-
-            // Total Amount
-            //    console.log('type of:')
-            console.log((order.items) + '\n')
-            // const totalAmount = order.items.reduce((sum, item) =>{
-            //      (sum + item.quantity * item.price, 0)
-            //     }
-            // );
+            // Delivery Charges
+            if (order.deliveryCharge) {
+                tableRows.push([
+                    'Delivery Charges', '', 1,
+                    `${order.deliveryCharge.toFixed(2)}`,
+                    `${order.deliveryCharge.toFixed(2)}`
+                ]);
+            }
 
             // Table Header and Rows
             const table = {
@@ -221,6 +228,7 @@ const generateQuotationPDF = async (order, address, gstDetails) => {
             doc.table(table, {
                 prepareHeader: () => doc.font("Helvetica-Bold").fontSize(10),
                 prepareRow: () => doc.font("Helvetica").fontSize(10),
+                columnWidths: [200, 70, 50, 70, 90], // Adjust column widths, give 200 to Item Name
             });
 
             // Total in Words
@@ -240,7 +248,7 @@ const generateQuotationPDF = async (order, address, gstDetails) => {
             doc.text('Bank Details:', { underline: true }).moveDown();
             doc.text('Bank: ICICI Bank').text('Account #: 428405001856').text('IFSC Code: ICIC0004284').text('Branch: B NARAYANAPURA').moveDown();
 
-            
+
             // Notes and Terms
             doc.text('Notes:', { underline: true }).text('Looking forward to your business!').moveDown();
             doc.text('Terms and Conditions:', { underline: true });

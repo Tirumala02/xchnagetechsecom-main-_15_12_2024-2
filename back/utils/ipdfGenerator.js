@@ -104,7 +104,7 @@ const iGenerateQuotationPDF = async (order, address, gstDetails) => {
                 const hsnCode = await getHSNCodeByCategory(item.category, hsnData);
                 const gstAmount = (((item.iprice || item.price) - item.price) * item.quantity).toFixed(2);
                 const totalWithGST = ((item.iprice || item.price) * item.quantity).toFixed(2);
-                const limitedTitle = Array.isArray(item.title) ? item.title[0] : item.title;
+                // const limitedTitle = Array.isArray(item.title) ? item.title[0] : item.title;
 
                 // Check if the name length exceeds a threshold and split to a new page
                 const nameWidth = doc.widthOfString(limitedTitle, { font: "Helvetica", size: 10 });
@@ -114,7 +114,7 @@ const iGenerateQuotationPDF = async (order, address, gstDetails) => {
                 }
 
                 return [
-                    limitedTitle,
+                    item.title,
                     hsnCode,
                     item.quantity,
                     item.price.toFixed(2),
