@@ -3,7 +3,7 @@ import { v2 as cloudinary } from "cloudinary";
 import productModel from "../models/productModel.js"
 import {fetchDataFromOxylabs} from '../utils/oxylabAmazonSearch.js'
 import searchAmazonQuery from "../services/searchScrapper.js";
-import scrapeAmazonProduct from "../services/productScrapper.js";
+import scrapeAmazonProduct from "../services/productScrapper.mjs";
 
 
 // function for add product
