@@ -21,7 +21,7 @@ const Contact = () => {
             Bangalore - 560034 Karnataka, INDIA
           </p>
           <p className=' text-gray-600'>Tel: +91 88677 71117 <br /> Email: sales_inquiries@xchangetechs.com</p>
-          <p className='font-semibold text-xl text-gray-800'>Careers at Exchange Tech</p>
+          <p className='font-semibold text-xl text-gray-800'>Careers at XchangeTechs</p>
           <p className=' text-gray-600'>Learn more about our teams and job openings.</p>
           <button className='border bg-gray-200 text-gray-700 border-black px-8 py-4 text-sm hover:bg-black hover:text-white transition-all duration-500'>Explore Jobs</button>
         </div>
