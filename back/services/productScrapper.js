@@ -120,7 +120,7 @@ async function scrapeAmazonProduct(productUrl) {
             asin:asin ||'Not Found',
             title: title || 'Not Found',
             price: price || 'Not Found',
-            iprice:price || 'Not Found',
+            iprice: iprice || 'Not Found',
             category: category || 'Not Found',
             features: features.length > 0 ? features : ['Not Found'],
             description: description,
